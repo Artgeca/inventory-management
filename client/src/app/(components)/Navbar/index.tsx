@@ -1,15 +1,29 @@
 'use client';
 
-import { Bell, Menu, Settings, Sun } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '@/app/redux';
+import { setIsDarkMode, setIsSidebarCollapsed } from '@/app/state';
+import { Bell, Menu, Moon, Settings, Sun } from 'lucide-react';
 import Link from 'next/link';
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
+  const isSidebarCollapsed = useAppSelector((state) => state.global.isSidebarCollapsed);
+  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
+
+  const toggleSidebar = () => {
+    dispatch(setIsSidebarCollapsed(!isSidebarCollapsed));
+  };
+
+  const toggleDarkMode = () => {
+    dispatch(setIsDarkMode(!isDarkMode));
+  };
+
   return (
     <div className='flex items-center justify-between w-full mb-7'>
       <div className='flex items-center justify-between gap-5'>
         <button
           className='p-3 bg-gray-100 rounded-full hover:bg-blue-100'
-          onClick={() => { console.log('first'); }}
+          onClick={toggleSidebar}
         >
           <Menu className='w-4 h-4' />
         </button>
@@ -17,7 +31,7 @@ const Navbar = () => {
           <input
             type="search"
             placeholder='Start type to search groups and products'
-            className='py-2 pl-10 pr-4 bg-white border-2 border-gray-300 rounded-lg w-50 md:w-80 focus:outline-none focus:border-blue-500'
+            className='py-2 pl-10 pr-4 bg-white border-2 border-gray-300 rounded-lg w-50 md:w-60 focus:outline-none focus:border-blue-500'
           />
           <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
             <Bell className='text-gray-500' size={20} />
@@ -28,8 +42,12 @@ const Navbar = () => {
       <div className='flex items-center justify-between gap-5'>
         <div className='items-center justify-between hidden gap-5 md:flex'>
           <div>
-            <button onClick={() => { }}>
-              <Sun className='text-gray-500 cursor-pointer' size={24} />
+            <button onClick={toggleDarkMode}>
+              {isDarkMode ? (
+                <Sun className='text-gray-500 cursor-pointer' size={24} />
+              ) : (
+                <Moon className='text-gray-500 cursor-pointer' size={24} />
+              )}
             </button>
           </div>
           <div className='relative'>
